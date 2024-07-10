@@ -4,12 +4,12 @@ import (
 	"fmt"
 	// Import your commands from other packages
 
-	"github.com/audstanley/DnD-Name-Generator-Binary/cmd/root"
+	"github.com/audstanley/DnD-Name-Generator-Binary/cmd"
 )
 
 func main() {
 	// Execute the Cobra application
-	if err := root.RootCmd.Execute(); err != nil {
+	if err := cmd.RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 	}
 }

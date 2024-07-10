@@ -47,7 +47,7 @@ var Number = &cobra.Command{
 				index2 = random.Intn(len(NamesList))
 			}
 
-			fmt.Printf("%s, %s\n", NamesList[index1], NamesList[index2])
+			fmt.Printf("%s %s\n", NamesList[index1], NamesList[index2])
 		}
 		return nil
 	},
@@ -61,7 +61,7 @@ var RootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Executing RootCmd")
+		//fmt.Println(NamesList)
 		if len(NamesList) == 0 {
 			return fmt.Errorf("names array is empty")
 		}
@@ -81,7 +81,7 @@ var RootCmd = &cobra.Command{
 				index2 = random.Intn(len(NamesList))
 			}
 
-			fmt.Printf("%s, %s\n", NamesList[index1], NamesList[index2])
+			fmt.Printf("%s %s\n", NamesList[index1], NamesList[index2])
 		}
 		return nil
 	},
@@ -105,11 +105,12 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dnd-names.yaml)")
-	RootCmd.PersistentFlags().StringArrayP("number", "n", []string{"1"}, "Number of names to generate")
+	//RootCmd.PersistentFlags().StringArrayP("number", "n", []string{"1"}, "Number of names to generate")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	RootCmd.Flags().IntVarP(&count, "number", "n", 1, "Number of names to generate")
 }
 
 // initConfig reads in config file and ENV variables if set.

@@ -71,3 +71,4 @@ Those text files will be automatically be alphabetised, and converted into golan
 
 ```
 
+See [generator/README.md](https://github.com/audstanley/DnD-Name-Generator-Binary) since it's in active development.

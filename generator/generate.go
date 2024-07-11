@@ -114,8 +114,27 @@ func Generate() error {
 }
 
 // ProcessSpeciesData function processes the provided YAML data and creates folders and text files
-func ProcessSpeciesDataForFolderStructredTextData(data map[string]map[string]interface{}) error {
-	for species, _ := range data["Species"] {
+func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interface{}) error {
+	fmt.Println("Processing species data...")
+	fmt.Println("Creating folders and text files...")
+	fmt.Println("Species data:", speciesMap)
+
+	SpeciesStructure := []SpeciesInfo{}
+
+	for species, v := range speciesMap {
+		SpeciesStructure = append(SpeciesStructure, SpeciesInfo{
+			NameOfSpecies: v.(map[string]interface{})["NameOfSpecies"].(string),
+			Variable:      v.(map[string]interface{})["Variable"].(string),
+			TextFileNames: []string{},
+		})
+		latestSpecies := SpeciesStructure[len(SpeciesStructure)-1]
+		for _, textFileName := range v.(map[string]interface{})["TextFileNames"].([]interface{}) {
+			fmt.Println("species:", species, "variable:", v.(map[string]interface{})["Variable"], "textFileName:", textFileName)
+			filepath := latestSpecies.NameOfSpecies + "/" + latestSpecies.NameOfSpecies + "-" + textFileName.(string) + ".txt"
+			latestSpecies.TextFileNames = append(latestSpecies.TextFileNames, filepath)
+		}
+
+		fmt.Println("species value:", v)
 		// Create folder for the species
 		if err := os.MkdirAll(species, os.ModePerm); err != nil {
 			switch {
@@ -128,31 +147,24 @@ func ProcessSpeciesDataForFolderStructredTextData(data map[string]map[string]int
 			fmt.Printf("\ngenerator/%s folder available\n", species)
 		}
 
-		// Define text file prefixes
-		prefixes := []string{"FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"}
-
-		for _, prefix := range prefixes {
-			// Build filename with species name and prefix
-			filename := fmt.Sprintf("%s-%s.txt", species, prefix)
-			filepath := fmt.Sprintf("%s/%s", species, filename)
-
+		for _, textFileNames := range latestSpecies.TextFileNames {
 			// Check if the file already exists
-			_, err := os.Stat(filepath)
+			_, err := os.Stat(textFileNames)
 			if err != nil && !os.IsNotExist(err) {
 				// Handle other errors
-				return fmt.Errorf("error checking file %s: %w", filepath, err)
+				return fmt.Errorf("error checking file %s: %w", textFileNames, err)
 			}
 
 			// If file doesn't exist, create it
 			if err == nil {
-				fmt.Printf("  generator/%s already exists. Skipping creation.\n", filepath)
+				fmt.Printf("  generator/%s already exists. Skipping creation.\n", textFileNames)
 				continue // Skip to next prefix
 			}
 
 			// Create empty text file
-			err = ioutil.WriteFile(filepath, []byte{}, 0644)
+			err = ioutil.WriteFile(textFileNames, []byte{}, 0644)
 			if err != nil && !os.IsNotExist(err) { // Check for specific os.IsNotExist error
-				fmt.Printf("Error creating file %s: %v\n", filepath, err)
+				fmt.Printf("Error creating file %s: %v\n", textFileNames, err)
 			}
 		}
 	}
@@ -161,7 +173,14 @@ func ProcessSpeciesDataForFolderStructredTextData(data map[string]map[string]int
 
 type SpeciesData struct {
 	// Other fields in the struct (if any)
-	Species map[string]interface{} `yaml:"Species"` // Assuming data comes from a YAML file
+	Species map[string]SpeciesInfo `yaml:"Species"` // Assuming data comes from a YAML file
+}
+
+type SpeciesInfo struct {
+	NameOfSpecies string   `yaml:"NameOfSpecies"`           // Field for species name
+	Variable      string   `yaml:"Variable,omitempty"`      // Field for your string value
+	TextFileNames []string `yaml:"TextFileNames,omitempty"` // Field for list of text files
+	// Other fields specific to species data (if any)
 }
 
 var speciesData SpeciesData
@@ -196,5 +215,5 @@ func ProcessYAMLAndCreateFiles(filePath string) error {
 	}
 
 	// Call ProcessSpeciesData to create folders and files
-	return ProcessSpeciesDataForFolderStructredTextData(speciesData)
+	return ProcessSpeciesDataForFolderStructredTextData(speciesMap)
 }

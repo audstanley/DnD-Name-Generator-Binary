@@ -38,3 +38,15 @@ Nifai Bralas
 ```
 
 Feel Free to fork, and add new names or new cli features. I've got cobra and viper setup for a config file - perhaps for last names from a yaml file. There are currently no categories, and no plan for that yet. I just needed a very simple way to do this in the cli. Enjoy. No First and Last names Either. I may have to devolop a last name feature instead of merging from a large list of generic fantasy names.
+
+### Development:
+```bash
+# generate go file from names list
+# first, add new names to generator/names.txt
+# then...
+./dnd-names --generate
+# then
+go build .
+mv DnD-Name-Generator-Binary dnd-names
+./dnd-names --number 10
+```

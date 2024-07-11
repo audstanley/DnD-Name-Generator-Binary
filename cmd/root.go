@@ -110,8 +110,6 @@ var RootCmd = &cobra.Command{
 			err := generator.Generate() // Generate the names.go file
 			if err != nil {
 				return err
-			} else {
-				fmt.Println("Successfully generated cmd/names.go file from generator/names.txt")
 			}
 			return nil
 		}

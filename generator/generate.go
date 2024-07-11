@@ -3,9 +3,12 @@ package generator
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 	"text/template"
+
+	"github.com/goccy/go-yaml"
 )
 
 // Names represents the data used for generating the file
@@ -88,5 +91,87 @@ func Generate() error {
 	if err != nil {
 		return err
 	}
-	return generateNamesFile(names)
+
+	err = generateNamesFile(names)
+	if err != nil {
+		return err
+	} else {
+		fmt.Println("Generated cmd/names.go file successfully")
+	}
+
+	// Generate all the text files for the species
+	fmt.Println("Generating species text files, if they don't already exist...")
+	cwd, _ := os.Getwd()
+	os.Chdir("generator")
+	err = ProcessYAMLAndCreateFiles("names.yaml")
+	if err != nil {
+		return err
+	}
+	os.Chdir(cwd)
+	return nil
+}
+
+// ProcessSpeciesData function processes the provided YAML data and creates folders and text files
+func ProcessSpeciesDataForFolderStructredTextData(data map[string]map[string]interface{}) error {
+	for species, _ := range data["Species"] {
+		// Create folder for the species
+		if err := os.MkdirAll(species, os.ModePerm); err != nil {
+			switch {
+			case os.IsExist(err):
+				fmt.Printf("\ngenerator/%s already exists. Skipping creation.\n", species)
+			default:
+				return fmt.Errorf("error creating folder %s: %w", species, err)
+			}
+		} else {
+			fmt.Printf("\ngenerator/%s folder available\n", species)
+		}
+
+		// Define text file prefixes
+		prefixes := []string{"FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"}
+
+		for _, prefix := range prefixes {
+			// Build filename with species name and prefix
+			filename := fmt.Sprintf("%s-%s.txt", species, prefix)
+			filepath := fmt.Sprintf("%s/%s", species, filename)
+
+			// Check if the file already exists
+			_, err := os.Stat(filepath)
+			if err != nil && !os.IsNotExist(err) {
+				// Handle other errors
+				return fmt.Errorf("error checking file %s: %w", filepath, err)
+			}
+
+			// If file doesn't exist, create it
+			if err == nil {
+				fmt.Printf("  generator/%s already exists. Skipping creation.\n", filepath)
+				continue // Skip to next prefix
+			}
+
+			// Create empty text file
+			err = ioutil.WriteFile(filepath, []byte{}, 0644)
+			if err != nil && !os.IsNotExist(err) { // Check for specific os.IsNotExist error
+				fmt.Printf("Error creating file %s: %v\n", filepath, err)
+			}
+		}
+	}
+	return nil
+}
+
+// ProcessYAMLAndCreateFiles function opens, parses YAML data and creates folders/files
+func ProcessYAMLAndCreateFiles(filePath string) error {
+	// Read YAML file content
+	data, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("error reading YAML file %s: %w", filePath, err)
+	}
+
+	// Parse YAML data into a map
+	var speciesData map[string]map[string]interface{}
+	err = yaml.Unmarshal(data, &speciesData)
+	if err != nil {
+		return fmt.Errorf("error parsing YAML data: %w", err)
+	}
+
+	// Call ProcessSpeciesData to create folders and files
+	return ProcessSpeciesDataForFolderStructredTextData(speciesData)
 }

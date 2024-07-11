@@ -37,7 +37,7 @@ Szanto Vanir
 Nifai Bralas
 ```
 
-Feel Free to fork, and add new names or new cli features. I've got cobra and viper setup for a config file - perhaps for last names from a yaml file. There are currently no categories, and no plan for that yet. I just needed a very simple way to do this in the cli. Enjoy. No First and Last names Either. I may have to devolop a last name feature instead of merging from a large list of generic fantasy names.
+Feel Free to fork, and add new names or new cli features. I've got cobra and viper setup for a config file - perhaps for last names from a yaml file. There are currently no categories/species, but plans for it. I just needed a very simple way to do this in the cli to get stared. Enjoy. No First and Last names either, but plans for it. I may have to devolop a last name feature instead of merging from a large list of generic fantasy names.
 
 ### Development:
 ```bash
@@ -50,3 +50,6 @@ go build .
 mv DnD-Name-Generator-Binary dnd-names
 ./dnd-names --number 10
 ```
+
+if you're forking and adding new names to the giant names list for a pull request - just make changes to the generator/names.txt file.
+if you're working on name categories by spiecies (formally "races") using a yaml file, please take a look at the format in names.yaml

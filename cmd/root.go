@@ -6,10 +6,16 @@ import (
 	"os"
 	"time"
 
+	"github.com/audstanley/DnD-Name-Generator-Binary/generator"
+	"github.com/imroc/req/v3"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
+
+var globalClient = req.C()
+
+var enableDebug bool
 
 var cfgFile string
 
@@ -19,15 +25,15 @@ type Config struct {
 }
 
 var count int
+var generate bool
 
-// Define the flag for number of times to print
-//rootCmd.Flags().IntVarP(&count, "number", "n", 1, "Number of times to print DnD Names from a huge list")
-
-// Add a command to handle the logic
+// Add Number command to handle the logic
+// not being called
 var Number = &cobra.Command{
 	Use:   "names",
 	Short: "Pick random elements from the names array",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		fmt.Println("Number of names to generate:", count)
 		if len(NamesList) == 0 {
 			return fmt.Errorf("names array is empty")
 		}
@@ -49,6 +55,17 @@ var Number = &cobra.Command{
 
 			fmt.Printf("%s %s\n", NamesList[index1], NamesList[index2])
 		}
+		return nil
+	},
+}
+
+// Add Generator command to handle the logic
+var Generator = &cobra.Command{
+	Use:   "generate",
+	Short: "Generate cmd/names.go file from generator/names.txt file (for development purposes)",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		fmt.Println("Generating names.go file...")
+		generator.Generate() // Generate the names.go file
 		return nil
 	},
 }
@@ -58,48 +75,53 @@ var RootCmd = &cobra.Command{
 	Use:   "DnD Name Generator",
 	Short: "Generate names for Dungeons and Dragons characters.",
 	Long:  `DnD Name Generator is a CLI application that generates names for Dungeons and Dragons characters.`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if enableDebug { // Enable debug mode if `--enableDebug=true` or `DEBUG=true`.
+			fmt.Println("Debug mode enabled")
+		}
+	},
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	RunE: func(cmd *cobra.Command, args []string) error {
-		//fmt.Println(NamesList)
-		if len(NamesList) == 0 {
-			return fmt.Errorf("names array is empty")
-		}
-
-		// Seed the random number generator
-		// Use a new source for randomness (recommended)
-		source := rand.NewSource(time.Now().UnixNano())
-		random := rand.New(source)
-
-		for i := 0; i < count; i++ {
-			// Pick two random indices
-			index1 := random.Intn(len(NamesList))
-			index2 := random.Intn(len(NamesList))
-
-			// Ensure indices are unique (avoid duplicates)
-			for index1 == index2 {
-				index2 = random.Intn(len(NamesList))
+		if !generate {
+			if len(NamesList) == 0 {
+				return fmt.Errorf("names array is empty")
 			}
+			// Seed the random number generator
+			// Use a new source for randomness (recommended)
+			source := rand.NewSource(time.Now().UnixNano())
+			random := rand.New(source)
 
-			fmt.Printf("%s %s\n", NamesList[index1], NamesList[index2])
+			for i := 0; i < count; i++ {
+				// Pick two random indices
+				index1 := random.Intn(len(NamesList))
+				index2 := random.Intn(len(NamesList))
+
+				// Ensure indices are unique (avoid duplicates)
+				for index1 == index2 {
+					index2 = random.Intn(len(NamesList))
+				}
+
+				fmt.Printf("%s %s\n", NamesList[index1], NamesList[index2])
+			}
+			return nil
+		} else {
+			fmt.Println("Generating cmd/names.go file from generator/names.txt...")
+			err := generator.Generate() // Generate the names.go file
+			if err != nil {
+				return err
+			} else {
+				fmt.Println("Successfully generated cmd/names.go file from generator/names.txt")
+			}
+			return nil
 		}
-		return nil
-	},
-}
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	fmt.Println("Executing RootCmd")
-	if err := RootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	},
 }
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	RootCmd.AddCommand(Number)
+	RootCmd.AddCommand(Generator)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -109,8 +131,9 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	RootCmd.PersistentFlags().BoolVar(&enableDebug, "debug", os.Getenv("DEBUG") == "true", "Enable debug mode")
 	RootCmd.Flags().IntVarP(&count, "number", "n", 1, "Number of names to generate")
+	RootCmd.PersistentFlags().BoolVarP(&generate, "generate", "g", false, "generate names from the generator/names.txt file, outputs go code to cmd/names.go")
 }
 
 // initConfig reads in config file and ENV variables if set.

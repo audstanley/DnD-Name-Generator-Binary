@@ -53,3 +53,21 @@ mv DnD-Name-Generator-Binary dnd-names
 
 if you're forking and adding new names to the giant names list for a pull request - just make changes to the generator/names.txt file.
 if you're working on name categories by spiecies (formally "races") using a yaml file, please take a look at the format in names.yaml
+
+```bash
+./dnd-names --generator # when in the project directory ...
+```
+
+will eventually work through the generator/speciesTypes subfolders and generate first and last names based on the text files.
+Those text files will be automatically be alphabetised, and converted into golang struct so that **eventually** you'll be able to use
+
+```bash
+# (not yet implemented)
+./dnd-names --female --dragonborn -n 10
+# print 10 female dragonborn names, first and last name.
+# or...
+./dnd-names --nonbinary --dragonborn -n 8
+# print 8 nonbinary dragonborn names, first and last name.
+
+```
+

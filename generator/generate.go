@@ -105,9 +105,11 @@ func Generate() error {
 	os.Chdir("generator")
 	err = ProcessYAMLAndCreateFiles("names.yaml")
 	if err != nil {
+		os.Chdir(cwd)
 		return err
 	}
 	os.Chdir(cwd)
+
 	return nil
 }
 
@@ -157,6 +159,13 @@ func ProcessSpeciesDataForFolderStructredTextData(data map[string]map[string]int
 	return nil
 }
 
+type SpeciesData struct {
+	// Other fields in the struct (if any)
+	Species map[string]interface{} `yaml:"Species"` // Assuming data comes from a YAML file
+}
+
+var speciesData SpeciesData
+
 // ProcessYAMLAndCreateFiles function opens, parses YAML data and creates folders/files
 func ProcessYAMLAndCreateFiles(filePath string) error {
 	// Read YAML file content
@@ -170,6 +179,20 @@ func ProcessYAMLAndCreateFiles(filePath string) error {
 	err = yaml.Unmarshal(data, &speciesData)
 	if err != nil {
 		return fmt.Errorf("error parsing YAML data: %w", err)
+	}
+
+	speciesMap := speciesData["Species"] // Access the map associated with "Species" key
+
+	// Now you can use speciesMap as a map[string]interface{}
+	if speciesMap != nil {
+		// Get keys from the speciesMap (using loop)
+		speciesKeys := make([]string, 0, len(speciesMap))
+		for key := range speciesMap {
+			speciesKeys = append(speciesKeys, key)
+		}
+		fmt.Println(speciesKeys)
+	} else {
+		fmt.Println("Species data not found")
 	}
 
 	// Call ProcessSpeciesData to create folders and files

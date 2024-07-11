@@ -59,7 +59,7 @@ if you're working on name categories by spiecies (formally "races") using a yaml
 ```
 
 will eventually work through the generator/speciesTypes subfolders and generate first and last names based on the text files.
-Those text files will be automatically be alphabetised, and converted into golang struct so that **eventually** you'll be able to use
+Those text files will be automatically be alphabetised, and converted into golang structs so that **eventually** you'll be able to use
 
 ```bash
 # (not yet implemented)

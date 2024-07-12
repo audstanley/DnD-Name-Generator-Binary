@@ -6,6 +6,7 @@ import (
 	// Import your commands from other packages
 
 	"github.com/audstanley/DnD-Name-Generator-Binary/cmd"
+	_ "github.com/audstanley/DnD-Name-Generator-Binary/cmd/species"
 )
 
 func main() {

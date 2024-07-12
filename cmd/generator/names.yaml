@@ -1,0 +1,185 @@
+Species:
+  Aarakocra:
+    NameOfSpecies: "Aarakocra"
+    Variable: "aarakocra"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Aasimar:
+    NameOfSpecies: "Aasimar"
+    Variable: "aasimar"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Autognome:
+    NameOfSpecies: "Autognome"
+    Variable: "autognome"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Bugbear:
+    NameOfSpecies: "Bugbear"
+    Variable: "bugbear"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Centaur:
+    NameOfSpecies: "Centaur"
+    Variable: "centaur"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Changeling:
+    NameOfSpecies: "Changeling"
+    Variable: "changeling"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Dhampir:
+    NameOfSpecies: "Dhampir"
+    Variable: "dhampir"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Dragonborn:
+    NameOfSpecies: "Dragonborn"
+    Variable: "dragonborn"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Dwarf:
+    NameOfSpecies: "Dwarf"
+    Variable: "dwarf"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Elf:
+    NameOfSpecies: "Elf"
+    Variable: "elf"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Fairy:
+    NameOfSpecies: "Fairy"
+    Variable: "fairy"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Firbolg:
+    NameOfSpecies: "Firbolg"
+    Variable: "firbolg"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Genasi:
+    NameOfSpecies: "Genasi"
+    Variable: "genasi"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Giff:
+    NameOfSpecies: "Giff"
+    Variable: "giff"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Gith:
+    NameOfSpecies: "Gith"
+    Variable: "gith"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Gnome:
+    NameOfSpecies: "Gnome"
+    Variable: "gnome"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Goblin:
+    NameOfSpecies: "Goblin"
+    Variable: "goblin"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Goliath:
+    NameOfSpecies: "Goliath"
+    Variable: "goliath"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Half-Elf:
+    NameOfSpecies: "Half-Elf"
+    Variable: "halfElf"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Half-Orc:
+    NameOfSpecies: "Half-Orc"
+    Variable: "halfOrc"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Halfling:
+    NameOfSpecies: "Halfling"
+    Variable: "halfling"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Harengon:
+    NameOfSpecies: "Harengon"
+    Variable: "harengon"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Hexblood:
+    NameOfSpecies: "Hexblood"
+    Variable: "hexblood"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Hobgoblin:
+    NameOfSpecies: "Hobgoblin"
+    Variable: "hobgoblin"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Human:
+    NameOfSpecies: "Human"
+    Variable: "human"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Kalashtar:
+    NameOfSpecies: "Kalashtar"
+    Variable: "kalashtar"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Kender:
+    NameOfSpecies: "Kender"
+    Variable: "kender"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Kenku:
+    NameOfSpecies: "Kenku"
+    Variable: "kenku"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Kobold:
+    NameOfSpecies: "Kobold"
+    Variable: "kobold"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Leonin:
+    NameOfSpecies: "Leonin"
+    Variable: "leonin"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Lizardfolk:
+    NameOfSpecies: "Lizardfolk"
+    Variable: "lizardfolk"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Lexodon:
+    NameOfSpecies: "Lexodon"
+    Variable: "lexodon"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Minotaur:
+    NameOfSpecies: "Minotaur"
+    Variable: "minotaur"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Orc:
+    NameOfSpecies: "Orc"
+    Variable: "orc"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Owlin:
+    NameOfSpecies: "Owlin"
+    Variable: "owlin"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Plasmoid:
+    NameOfSpecies: "Plasmoid"
+    Variable: "plasmoid"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Reborn:
+    NameOfSpecies: "Reborn"
+    Variable: "reborn"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Satyr:
+    NameOfSpecies: "Satyr"
+    Variable: "satyr"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Shifter:
+    NameOfSpecies: "Shifter"
+    Variable: "shifter"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Simic Hybrid:
+    NameOfSpecies: "Simic Hybrid"
+    Variable: "simicHybrid"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Tabaxi:
+    NameOfSpecies: "Tabaxi"
+    Variable: "tabaxi"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last", "Special"]
+  Thri-Kreen:
+    NameOfSpecies: "Thri-Kreen"
+    Variable: "thriKreen"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Tiefling:
+    NameOfSpecies: "Tiefling"
+    Variable: "tiefling"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last", "Special"]
+  Tortle:
+    NameOfSpecies: "Tortle"
+    Variable: "tortle"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Triton:
+    NameOfSpecies: "Triton"
+    Variable: "triton"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+  Vendalken:
+    NameOfSpecies: "Vendalken"
+    Variable: "vendalken"
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]

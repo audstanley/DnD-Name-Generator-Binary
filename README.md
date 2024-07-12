@@ -44,7 +44,7 @@ Feel Free to fork, and add new names or new cli features. I've got cobra and vip
 # generate go file from names list
 # first, add new names to generator/names.txt
 # then...
-./dnd-names --generate
+./dnd-names generate
 # then
 go build .
 mv DnD-Name-Generator-Binary dnd-names
@@ -55,7 +55,7 @@ if you're forking and adding new names to the giant names list for a pull reques
 if you're working on name categories by spiecies (formally "races") using a yaml file, please take a look at the format in names.yaml
 
 ```bash
-./dnd-names --generator # when in the project directory ...
+./dnd-name generate # when in the project directory ...
 ```
 
 will eventually work through the generator/speciesTypes subfolders and generate first and last names based on the text files.
@@ -71,4 +71,4 @@ Those text files will be automatically be alphabetised, and converted into golan
 
 ```
 
-See [generator/README.md](https://github.com/audstanley/DnD-Name-Generator-Binary/tree/main/generator) since it's in active development.
+See [cmd/generator/README.md](https://github.com/audstanley/DnD-Name-Generator-Binary/tree/main/generator) since it's in active development.

@@ -7,16 +7,12 @@ import (
 	"time"
 
 	"github.com/audstanley/DnD-Name-Generator-Binary/generator"
-	"github.com/imroc/req/v3"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var globalClient = req.C()
-
 var enableDebug bool
-
 var cfgFile string
 
 // Config stores configuration values
@@ -76,7 +72,7 @@ var RootCmd = &cobra.Command{
 	Short: "Generate names for Dungeons and Dragons characters.",
 	Long:  `DnD Name Generator is a CLI application that generates names for Dungeons and Dragons characters.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		if enableDebug { // Enable debug mode if `--enableDebug=true` or `DEBUG=true`.
+		if enableDebug { // Enable debug mode if `--debug=true` or `DEBUG=true`.
 			fmt.Println("Debug mode enabled")
 		}
 	},

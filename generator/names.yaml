@@ -19,7 +19,7 @@ Species:
     NameOfSpecies: "Centaur"
     Variable: "centaur"
     TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
-  Changling:
+  Changeling:
     NameOfSpecies: "Changeling"
     Variable: "changeling"
     TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
@@ -79,7 +79,7 @@ Species:
     NameOfSpecies: "Half-Orc"
     Variable: "halfOrc"
     TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
-  Halfing:
+  Halfling:
     NameOfSpecies: "Halfling"
     Variable: "halfling"
     TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
@@ -170,7 +170,7 @@ Species:
   Tiefling:
     NameOfSpecies: "Tiefling"
     Variable: "tiefling"
-    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last"]
+    TextFileNames: ["FemaleFirst", "MaleFirst", "NonbinaryFirst", "Last", "Special"]
   Tortle:
     NameOfSpecies: "Tortle"
     Variable: "tortle"

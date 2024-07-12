@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 	"strings"
 	"text/template"
 
 	"github.com/goccy/go-yaml"
 )
+
+var enableDebug bool
 
 // Names represents the data used for generating the file
 type Names struct {
@@ -37,7 +40,6 @@ func readNamesFromFile() ([]string, error) {
 }
 
 func generateNamesFile(names []string) error {
-
 	// Trim whitespace from each name, just in case.
 	for i, name := range names {
 		names[i] = strings.TrimSpace(name)
@@ -87,6 +89,10 @@ var NamesList = []string{
 
 // Generate the names.go file by reading names from a file
 func Generate() error {
+	enableDebug = false
+	if enableDebug {
+		fmt.Println("Debug mode enabled from generator function")
+	}
 	names, err := readNamesFromFile()
 	if err != nil {
 		return err
@@ -103,23 +109,45 @@ func Generate() error {
 	fmt.Println("Generating species text files, if they don't already exist...")
 	cwd, _ := os.Getwd()
 	os.Chdir("generator")
-	err = ProcessYAMLAndCreateFiles("names.yaml")
+	err, speciesStructure := ProcessYAMLAndCreateFiles("names.yaml")
 	if err != nil {
 		os.Chdir(cwd)
 		return err
 	}
+	err = OrgnaizeSpeciesData(speciesStructure)
+	if err != nil {
+		fmt.Println("Error organizing species data:", err)
+		return err
+	}
+
 	os.Chdir(cwd)
 
 	return nil
 }
 
+// OrgnaizeSpeciesData function organizes an array of SpeciesInfo structs by
+// looping throught each SpeciesInfo.TextFileNames and passing the files to
+// AlphabetizeAndTrimFile
+func OrgnaizeSpeciesData(speciesStructure []SpeciesInfo) error {
+	fmt.Println("\n\nOrganizing species data...")
+	for _, species := range speciesStructure {
+		fmt.Printf("  Organizing species %s... %v\n", species.NameOfSpecies, species.TextFileNames)
+		for _, textFileName := range species.TextFileNames {
+			if err := AlphabetizeAndTrimFile(textFileName); err != nil {
+				return fmt.Errorf("error alphabetizing and trimming file %s: %w", textFileName, err)
+			}
+		}
+	}
+	return nil
+}
+
 // ProcessSpeciesData function processes the provided YAML data and creates folders and text files
-func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interface{}) error {
+func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interface{}) (error error, SpeciesStructure []SpeciesInfo) {
 	fmt.Println("Processing species data...")
 	fmt.Println("Creating folders and text files...")
-	fmt.Println("Species data:", speciesMap)
-
-	SpeciesStructure := []SpeciesInfo{}
+	if enableDebug {
+		fmt.Println("Species data:", speciesMap)
+	}
 
 	for species, v := range speciesMap {
 		SpeciesStructure = append(SpeciesStructure, SpeciesInfo{
@@ -129,22 +157,28 @@ func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interfac
 		})
 		latestSpecies := SpeciesStructure[len(SpeciesStructure)-1]
 		for _, textFileName := range v.(map[string]interface{})["TextFileNames"].([]interface{}) {
-			fmt.Println("species:", species, "variable:", v.(map[string]interface{})["Variable"], "textFileName:", textFileName)
+			if enableDebug {
+				fmt.Println("species:", species, "variable:", v.(map[string]interface{})["Variable"], "textFileName:", textFileName)
+			}
 			filepath := latestSpecies.NameOfSpecies + "/" + latestSpecies.NameOfSpecies + "-" + textFileName.(string) + ".txt"
 			latestSpecies.TextFileNames = append(latestSpecies.TextFileNames, filepath)
 		}
+		SpeciesStructure[len(SpeciesStructure)-1] = latestSpecies
 
-		fmt.Println("species value:", v)
 		// Create folder for the species
 		if err := os.MkdirAll(species, os.ModePerm); err != nil {
 			switch {
 			case os.IsExist(err):
-				fmt.Printf("\ngenerator/%s already exists. Skipping creation.\n", species)
+				if enableDebug {
+					fmt.Printf("\ngenerator/%s already exists. Skipping creation.\n", species)
+				}
 			default:
-				return fmt.Errorf("error creating folder %s: %w", species, err)
+				return fmt.Errorf("error creating folder %s: %w", species, err), nil
 			}
 		} else {
-			fmt.Printf("\ngenerator/%s folder available\n", species)
+			if enableDebug {
+				fmt.Printf("\ngenerator/%s folder available\n", species)
+			}
 		}
 
 		for _, textFileNames := range latestSpecies.TextFileNames {
@@ -152,13 +186,15 @@ func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interfac
 			_, err := os.Stat(textFileNames)
 			if err != nil && !os.IsNotExist(err) {
 				// Handle other errors
-				return fmt.Errorf("error checking file %s: %w", textFileNames, err)
+				return fmt.Errorf("error checking file %s: %w", textFileNames, err), nil
 			}
 
 			// If file doesn't exist, create it
 			if err == nil {
-				fmt.Printf("  generator/%s already exists. Skipping creation.\n", textFileNames)
-				continue // Skip to next prefix
+				if enableDebug {
+					fmt.Printf("  generator/%s already exists. Skipping creation.\n", textFileNames)
+				}
+				continue // Skip to next set of textFileNames
 			}
 
 			// Create empty text file
@@ -168,7 +204,7 @@ func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interfac
 			}
 		}
 	}
-	return nil
+	return nil, SpeciesStructure
 }
 
 type SpeciesData struct {
@@ -186,18 +222,18 @@ type SpeciesInfo struct {
 var speciesData SpeciesData
 
 // ProcessYAMLAndCreateFiles function opens, parses YAML data and creates folders/files
-func ProcessYAMLAndCreateFiles(filePath string) error {
+func ProcessYAMLAndCreateFiles(filePath string) (error error, SpeciesStructure []SpeciesInfo) {
 	// Read YAML file content
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return fmt.Errorf("error reading YAML file %s: %w", filePath, err)
+		return fmt.Errorf("error reading YAML file %s: %w", filePath, err), nil
 	}
 
 	// Parse YAML data into a map
 	var speciesData map[string]map[string]interface{}
 	err = yaml.Unmarshal(data, &speciesData)
 	if err != nil {
-		return fmt.Errorf("error parsing YAML data: %w", err)
+		return fmt.Errorf("error parsing YAML data: %w", err), nil
 	}
 
 	speciesMap := speciesData["Species"] // Access the map associated with "Species" key
@@ -216,4 +252,53 @@ func ProcessYAMLAndCreateFiles(filePath string) error {
 
 	// Call ProcessSpeciesData to create folders and files
 	return ProcessSpeciesDataForFolderStructredTextData(speciesMap)
+}
+
+// AlphabetizeAndTrimFile reads a text file, sorts lines alphabetically, trims whitespace, and rewrites the file
+func AlphabetizeAndTrimFile(filepath string) error {
+	fmt.Printf("  Alphabetizing and trimming file %s...\n", filepath)
+
+	// Open the file for reading
+	file, err := os.Open(filepath)
+	if err != nil {
+		return err
+	}
+	defer file.Close() // Ensure file is closed
+
+	// Use bufio.Scanner for efficient line-by-line processing
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanLines) // Split on newlines
+
+	// Use a map to store unique lines
+	uniqueLines := make(map[string]bool)
+	for scanner.Scan() {
+		// Trim leading and trailing whitespace from each line
+		line := strings.TrimSpace(scanner.Text())
+		if line != "" { // Add only non-empty lines
+			uniqueLines[line] = true // Add to map if unique
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+
+	// Convert map to a slice for sorting
+	var lines []string
+	for line := range uniqueLines {
+		lines = append(lines, line)
+	}
+
+	// Sort the trimmed lines alphabetically
+	sort.Strings(lines)
+
+	// Join the sorted lines back into a string with newline characters
+	sortedData := strings.Join(lines, "\n")
+
+	// Overwrite the file with the sorted and trimmed data
+	err = ioutil.WriteFile(filepath, []byte(sortedData), 0644) // Adjust permissions as needed
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

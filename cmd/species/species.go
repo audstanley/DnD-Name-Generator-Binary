@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var fisrtFName bool
-var fisrtMName bool
+var firstFName bool
+var firstMName bool
 var firstNBName bool
 var lastName bool
 var specialName bool
@@ -67,7 +67,192 @@ var SpeciesCommand = &cobra.Command{
 	Use:   "species",
 	Short: "Generate names for Dungeons and Dragons species based on the species name.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Generating names for Dungeons and Dragons species...")
+		fmt.Println("CHECKING FOR GENDER...")
+		aarakocra, _ = cmd.Flags().GetBool("aarakocra")
+		if aarakocra {
+			fmt.Println("Generating aarakocra names")
+		}
+		aasimar, _ = cmd.Flags().GetBool("aasimar")
+		if aasimar {
+			fmt.Println("Generating aasimar names")
+		}
+		autognome, _ = cmd.Flags().GetBool("autognome")
+		if autognome {
+			fmt.Println("Generating autognome names")
+		}
+		bugbear, _ = cmd.Flags().GetBool("bugbear")
+		if bugbear {
+			fmt.Println("Generating bugbear names")
+		}
+		centaur, _ = cmd.Flags().GetBool("centaur")
+		if centaur {
+			fmt.Println("Generating centaur names")
+		}
+		changeling, _ = cmd.Flags().GetBool("changeling")
+		if changeling {
+			fmt.Println("Generating changeling names")
+		}
+		dhampir, _ = cmd.Flags().GetBool("dhampir")
+		if dhampir {
+			fmt.Println("Generating dhampir names")
+		}
+		dragonborn, _ = cmd.Flags().GetBool("dragonborn")
+		if dragonborn {
+			fmt.Println("Generating dragonborn names")
+		}
+		dwarf, _ = cmd.Flags().GetBool("dwarf")
+		if dwarf {
+			fmt.Println("Generating dwarf names")
+		}
+		elf, _ = cmd.Flags().GetBool("elf")
+		if elf {
+			fmt.Println("Generating elf names")
+		}
+		fairy, _ = cmd.Flags().GetBool("fairy")
+		if fairy {
+			fmt.Println("Generating fairy names")
+		}
+		firbolg, _ = cmd.Flags().GetBool("firbolg")
+		if firbolg {
+			fmt.Println("Generating firbolg names")
+		}
+		genasi, _ = cmd.Flags().GetBool("genasi")
+		if genasi {
+			fmt.Println("Generating genasi names")
+		}
+		giff, _ = cmd.Flags().GetBool("giff")
+		if giff {
+			fmt.Println("Generating giff names")
+		}
+		gith, _ = cmd.Flags().GetBool("gith")
+		if gith {
+			fmt.Println("Generating gith names")
+		}
+		gnome, _ = cmd.Flags().GetBool("gnome")
+		if gnome {
+			fmt.Println("Generating gnome names")
+		}
+		goblin, _ = cmd.Flags().GetBool("goblin")
+		if goblin {
+			fmt.Println("Generating goblin names")
+		}
+		goliath, _ = cmd.Flags().GetBool("goliath")
+		if goliath {
+			fmt.Println("Generating goliath names")
+		}
+		halfElf, _ = cmd.Flags().GetBool("halfElf")
+		if halfElf {
+			fmt.Println("Generating halfElf names")
+		}
+		halfOrc, _ = cmd.Flags().GetBool("halfOrc")
+		if halfOrc {
+			fmt.Println("Generating halfOrc names")
+		}
+		halfling, _ = cmd.Flags().GetBool("halfling")
+		if halfling {
+			fmt.Println("Generating halfling names")
+		}
+		harengon, _ = cmd.Flags().GetBool("harengon")
+		if harengon {
+			fmt.Println("Generating harengon names")
+		}
+		hexblood, _ = cmd.Flags().GetBool("hexblood")
+		if hexblood {
+			fmt.Println("Generating hexblood names")
+		}
+		hobgoblin, _ = cmd.Flags().GetBool("hobgoblin")
+		if hobgoblin {
+			fmt.Println("Generating hobgoblin names")
+		}
+		human, _ = cmd.Flags().GetBool("human")
+		if human {
+			fmt.Println("Generating human names")
+		}
+		kalashtar, _ = cmd.Flags().GetBool("kalashtar")
+		if kalashtar {
+			fmt.Println("Generating kalashtar names")
+		}
+		kender, _ = cmd.Flags().GetBool("kender")
+		if kender {
+			fmt.Println("Generating kender names")
+		}
+		kenku, _ = cmd.Flags().GetBool("kenku")
+		if kenku {
+			fmt.Println("Generating kenku names")
+		}
+		kobold, _ = cmd.Flags().GetBool("kobold")
+		if kobold {
+			fmt.Println("Generating kobold names")
+		}
+		leonin, _ = cmd.Flags().GetBool("leonin")
+		if leonin {
+			fmt.Println("Generating leonin names")
+		}
+		lexodon, _ = cmd.Flags().GetBool("lexodon")
+		if lexodon {
+			fmt.Println("Generating lexodon names")
+		}
+		lizardfolk, _ = cmd.Flags().GetBool("lizardfolk")
+		if lizardfolk {
+			fmt.Println("Generating lizardfolk names")
+		}
+		minotaur, _ = cmd.Flags().GetBool("minotaur")
+		if minotaur {
+			fmt.Println("Generating minotaur names")
+		}
+		orc, _ = cmd.Flags().GetBool("orc")
+		if orc {
+			fmt.Println("Generating orc names")
+		}
+		owlin, _ = cmd.Flags().GetBool("owlin")
+		if owlin {
+			fmt.Println("Generating owlin names")
+		}
+		plasmoid, _ = cmd.Flags().GetBool("plasmoid")
+		if plasmoid {
+			fmt.Println("Generating plasmoid names")
+		}
+		reborn, _ = cmd.Flags().GetBool("reborn")
+		if reborn {
+			fmt.Println("Generating reborn names")
+		}
+		satyr, _ = cmd.Flags().GetBool("satyr")
+		if satyr {
+			fmt.Println("Generating satyr names")
+		}
+		shifter, _ = cmd.Flags().GetBool("shifter")
+		if shifter {
+			fmt.Println("Generating shifter names")
+		}
+		simicHybrid, _ = cmd.Flags().GetBool("simicHybrid")
+		if simicHybrid {
+			fmt.Println("Generating simicHybrid names")
+		}
+		tabaxi, _ = cmd.Flags().GetBool("tabaxi")
+		if tabaxi {
+			fmt.Println("Generating tabaxi names")
+		}
+		thriKreen, _ = cmd.Flags().GetBool("thriKreen")
+		if thriKreen {
+			fmt.Println("Generating thriKreen names")
+		}
+		tiefling, _ = cmd.Flags().GetBool("tiefling")
+		if tiefling {
+			fmt.Println("Generating tiefling names")
+		}
+		tortle, _ = cmd.Flags().GetBool("tortle")
+		if tortle {
+			fmt.Println("Generating tortle names")
+		}
+		triton, _ = cmd.Flags().GetBool("triton")
+		if triton {
+			fmt.Println("Generating triton names")
+		}
+		vendalken, _ = cmd.Flags().GetBool("vendalken")
+		if vendalken {
+			fmt.Println("Generating vendalken names")
+		}
+
 		return nil
 	},
 }
@@ -76,6 +261,7 @@ func init() {
 	cobra.OnInitialize(cmd.InitConfig)
 	cmd.RootCmd.AddCommand(cmd.Generator)
 	cmd.RootCmd.AddCommand(SpeciesCommand)
+
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -87,6 +273,8 @@ func init() {
 	cmd.RootCmd.PersistentFlags().BoolVar(&cmd.EnableDebug, "debug", os.Getenv("DEBUG") == "true", "Enable debug mode")
 	cmd.RootCmd.Flags().IntVarP(&cmd.Count, "number", "n", 1, "Number of names to generate")
 	//RootCmd.PersistentFlags().BoolVarP(&generate, "generate", "g", false, "generate names from the generator/names.txt file, outputs go code to cmd/names.go")
+	SpeciesCommand.PersistentFlags().BoolVar(&firstFName, "first", false, "generate a first name, make sure to specify the species")
+
 	SpeciesCommand.PersistentFlags().BoolVar(&aarakocra, "aarakocra", false, "generate aarakocra names")
 	SpeciesCommand.PersistentFlags().BoolVar(&aasimar, "aasimar", false, "generate aasimar names")
 	SpeciesCommand.PersistentFlags().BoolVar(&autognome, "autognome", false, "generate autognome names")

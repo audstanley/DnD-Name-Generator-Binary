@@ -3,7 +3,6 @@ package generator
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 
 	"os"
 	"sort"
@@ -19,6 +18,24 @@ var enableDebug bool
 type Names struct {
 	PackageName string
 	Names       []string
+}
+
+type SpeciesData struct {
+	// Other fields in the struct (if any)
+	Species map[string]SpeciesInfo `yaml:"Species"` // Assuming data comes from a YAML file
+}
+
+type SpeciesInfo struct {
+	NameOfSpecies string   `yaml:"NameOfSpecies"`           // Field for species name
+	Variable      string   `yaml:"Variable,omitempty"`      // Field for your string value
+	TextFileNames []string `yaml:"TextFileNames,omitempty"` // Field for list of text files
+	// Other fields specific to species data (if any)
+}
+
+func printSpeciesData(speciesData []SpeciesInfo) {
+	for i, species := range speciesData {
+		fmt.Printf("%d: Name: %s, Variable: %s, Files: %v\n", i, species.NameOfSpecies, species.Variable, species.TextFileNames)
+	}
 }
 
 func readNamesFromFile() ([]string, error) {
@@ -122,13 +139,46 @@ func Generate() error {
 		return err
 	}
 
-	for _, species := range speciesStructure {
-		fmt.Printf("var %s bool\n", species.Variable)
-	}
-
 	os.Chdir(cwd)
 
+	GenerateSpecies(speciesStructure)
+
 	return nil
+}
+
+// Generate cmd/species/species.go file species template files
+func GenerateSpecies(speciesStructure []SpeciesInfo) error {
+	if (speciesStructure == nil) || (len(speciesStructure) == 0) {
+		return fmt.Errorf("speciesStructure is empty")
+	} else {
+		for _, species := range speciesStructure {
+			fmt.Printf("Look Variables: %s\n", species.Variable)
+		}
+
+		// Parse templates
+		templSpeciesCommand, err := template.ParseFiles("cmd/species/species.tmpl")
+		if err != nil {
+			fmt.Println("Error parsing template:", err)
+			panic(err)
+		}
+
+		// Create a file for output
+		f, err := os.Create("cmd/species/species-test.txt")
+		if err != nil {
+			fmt.Println("Error creating file:", err)
+			panic(err)
+		}
+		defer f.Close()
+		printSpeciesData(speciesStructure)
+
+		// Execute the template and write to the file
+		err = templSpeciesCommand.Execute(f, speciesStructure)
+		if err != nil {
+			fmt.Println("Error executing template:", err)
+			panic(err)
+		}
+		return nil
+	}
 }
 
 // OrgnaizeSpeciesData function organizes an array of SpeciesInfo structs by
@@ -148,19 +198,19 @@ func OrgnaizeSpeciesData(speciesStructure []SpeciesInfo) error {
 }
 
 // ProcessSpeciesData function processes the provided YAML data and creates folders and text files
-func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interface{}) (SpeciesStructure []SpeciesInfo, error error) {
+func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interface{}) (speciesStructure []SpeciesInfo, error error) {
 	fmt.Println("Processing species data, Creating folders and text files, and Sorting SpeciesStructure by Variable...")
 	if enableDebug {
 		fmt.Println("Species data:", speciesMap)
 	}
 
 	for species, v := range speciesMap {
-		SpeciesStructure = append(SpeciesStructure, SpeciesInfo{
+		speciesStructure = append(speciesStructure, SpeciesInfo{
 			NameOfSpecies: v.(map[string]interface{})["NameOfSpecies"].(string),
 			Variable:      v.(map[string]interface{})["Variable"].(string),
 			TextFileNames: []string{},
 		})
-		latestSpecies := SpeciesStructure[len(SpeciesStructure)-1]
+		latestSpecies := speciesStructure[len(speciesStructure)-1]
 		for _, textFileName := range v.(map[string]interface{})["TextFileNames"].([]interface{}) {
 			if enableDebug {
 				fmt.Println("species:", species, "variable:", v.(map[string]interface{})["Variable"], "textFileName:", textFileName)
@@ -168,7 +218,7 @@ func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interfac
 			filepath := latestSpecies.NameOfSpecies + "/" + latestSpecies.NameOfSpecies + "-" + textFileName.(string) + ".txt"
 			latestSpecies.TextFileNames = append(latestSpecies.TextFileNames, filepath)
 		}
-		SpeciesStructure[len(SpeciesStructure)-1] = latestSpecies
+		speciesStructure[len(speciesStructure)-1] = latestSpecies
 
 		// Create folder for the species
 		if err := os.MkdirAll(species, os.ModePerm); err != nil {
@@ -203,37 +253,23 @@ func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interfac
 			}
 
 			// Create empty text file
-			err = ioutil.WriteFile(textFileNames, []byte{}, 0644)
+			err = os.WriteFile(textFileNames, []byte{}, 0644)
 			if err != nil && !os.IsNotExist(err) { // Check for specific os.IsNotExist error
 				fmt.Printf("Error creating file %s: %v\n", textFileNames, err)
 			}
 		}
 
-		sort.Slice(SpeciesStructure, func(i, j int) bool {
-			return SpeciesStructure[i].Variable < SpeciesStructure[j].Variable
+		sort.Slice(speciesStructure, func(i, j int) bool {
+			return speciesStructure[i].Variable < speciesStructure[j].Variable
 		})
 	}
-	return SpeciesStructure, nil
+	return speciesStructure, nil
 }
-
-type SpeciesData struct {
-	// Other fields in the struct (if any)
-	Species map[string]SpeciesInfo `yaml:"Species"` // Assuming data comes from a YAML file
-}
-
-type SpeciesInfo struct {
-	NameOfSpecies string   `yaml:"NameOfSpecies"`           // Field for species name
-	Variable      string   `yaml:"Variable,omitempty"`      // Field for your string value
-	TextFileNames []string `yaml:"TextFileNames,omitempty"` // Field for list of text files
-	// Other fields specific to species data (if any)
-}
-
-var speciesData SpeciesData
 
 // ProcessYAMLAndCreateFiles function opens, parses YAML data and creates folders/files
 func ProcessYAMLAndCreateFiles(filePath string) (SpeciesStructure []SpeciesInfo, error error) {
 	// Read YAML file content
-	data, err := ioutil.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("error reading YAML file %s: %w", filePath, err)
 	}
@@ -304,7 +340,7 @@ func AlphabetizeAndTrimFile(filepath string) error {
 	sortedData := strings.Join(lines, "\n")
 
 	// Overwrite the file with the sorted and trimmed data
-	err = ioutil.WriteFile(filepath, []byte(sortedData), 0644) // Adjust permissions as needed
+	err = os.WriteFile(filepath, []byte(sortedData), 0644) // Adjust permissions as needed
 	if err != nil {
 		return err
 	}

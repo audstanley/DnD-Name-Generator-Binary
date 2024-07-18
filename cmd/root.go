@@ -28,7 +28,11 @@ var Generator = &cobra.Command{
 	Short: "Generate cmd/generator/names.go file from generator/names.txt file (for development purposes)",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Generating names.go file...")
-		err := generator.Generate() // Generate the names.go file
+		debug, err := cmd.Flags().GetBool("debug")
+		if err != nil {
+			return err
+		}
+		err = generator.Generate(debug) // Generate the names.go file
 		if err != nil {
 			return err
 		}

@@ -62,6 +62,13 @@ var tortle bool
 var triton bool
 var vendalken bool
 
+// this function will get the species from a list of species from the
+// cmd/species/speciesNames.go file and return a random first and last name
+// based on the species
+func getSpeciesForSpeciesCommand(species string) {
+	fmt.Println("Generating names for " + species)
+}
+
 // Add SpeciesCommand to handle the logic
 var SpeciesCommand = &cobra.Command{
 	Use:   "species",

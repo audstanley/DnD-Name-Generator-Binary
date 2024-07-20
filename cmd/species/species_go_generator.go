@@ -14,7 +14,9 @@ type Species interface {
 
 type GenericSpecies struct {
 	GlobalVariableName string   `mapstructure:"global_variable_name"` // Name of the global variable
-	FileName           []string `mapstructure:"file_name"`
+	FirstFNames        []string `mapstructure:"first_f_names"`
+	FirstMNames        []string `mapstructure:"first_m_names"`
+	FirstNBNames       []string `mapstructure:"first_nb_names"`
 	FirstNames         []string `mapstructure:"first_names"`
 	LastNames          []string `mapstructure:"last_names"`
 	SpecialNames       []string `mapstructure:"special_names"`
@@ -71,10 +73,12 @@ var PublicTiefling = Tiefling{}
 var PublicLocationNames []string
 
 func (species GenericSpecies) Init() {
+	// Populate LocationNames from YAML file
 
 	PublicAasimar.GlobalVariableName = "Aasimar"
-	PublicAasimar.FileName = []string{"aasimar_first_names.txt", "aasimar_last_names.txt"}
-	PublicAasimar.FirstNames = []string{"aasimar_first_names.txt"}
+	PublicAasimar.FirstFNames = []string{"aasimar_first_names.txt"}
+	PublicAasimar.FirstMNames = []string{"aasimar_first_names.txt"}
+	PublicAasimar.FirstNBNames = []string{"aasimar_first_names.txt"}
 	PublicAasimar.LastNames = []string{"aasimar_last_names.txt"}
 	PublicAasimar.SpecialNames = []string{"aasimar_special_names.txt"}
 

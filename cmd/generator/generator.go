@@ -3,6 +3,7 @@ package generator
 import (
 	"bufio"
 	"fmt"
+	"regexp"
 
 	"os"
 	"sort"
@@ -22,7 +23,8 @@ type Names struct {
 
 type SpeciesData struct {
 	// Other fields in the struct (if any)
-	Species map[string]SpeciesInfo `yaml:"Species"` // Assuming data comes from a YAML file
+	Species                 *[]SpeciesInfo `yaml:"Species"`                           // Assuming data comes from a YAML file
+	GenericSpeciesInterface string         `yaml:"GenericSpeciesInterface,omitempty"` // Field for generic species interface
 }
 
 type NamesTypes struct {
@@ -127,11 +129,14 @@ func Generate(enableDebug bool) error {
 	if EnableDebug {
 		fmt.Println("Debug mode enabled from generator function")
 	}
+
+	// reads cmd/generator/names.txt file to cmd/generator/generate names.go file
 	names, err := readNamesFromFile()
 	if err != nil {
 		return err
 	}
 
+	// Generate the names.go file
 	err = generateNamesFile(names)
 	if err != nil {
 		return err
@@ -144,6 +149,11 @@ func Generate(enableDebug bool) error {
 	cwd, _ := os.Getwd()
 	fmt.Println("Current working directory:", cwd)
 	os.Chdir("cmd/generator")
+
+	// Process the YAML data and create folders and text files
+	// Then organize the species data and generate the species.go file
+	// These generated text files can be used for easy access to names
+	// for each species.
 	speciesStructure, err := ProcessYAMLAndCreateFiles("names.yaml")
 	if err != nil {
 		os.Chdir(cwd)
@@ -154,16 +164,19 @@ func Generate(enableDebug bool) error {
 		fmt.Println("Error organizing species data:", err)
 		return err
 	}
-
 	os.Chdir(cwd)
-
-	GenerateSpecies(speciesStructure)
+	err = GenerateSpecies(speciesStructure)
+	if err != nil {
+		fmt.Println("Error generating species.go file:", err)
+		return err
+	}
 
 	return nil
 }
 
 // Generate cmd/species/species.go file species template files
 func GenerateSpecies(speciesStructure []SpeciesInfo) error {
+	genericSpeciesInterfaceStr := ""
 	if (speciesStructure == nil) || (len(speciesStructure) == 0) {
 		return fmt.Errorf("speciesStructure is empty")
 	} else {
@@ -191,6 +204,48 @@ func GenerateSpecies(speciesStructure []SpeciesInfo) error {
 			fmt.Println("Error executing template:", err)
 			panic(err)
 		}
+
+		// Prep data for cmd/species/species_go_generator.go
+		// Parse the generic species interface template
+		for i, _ := range speciesStructure {
+			genericSpeciesInterfaceStr += speciesStructure[i].GlobalVariableName + " | "
+		}
+		// trim the string for printing
+		trimRight := len(genericSpeciesInterfaceStr) - 3
+		genericSpeciesInterfaceStr = genericSpeciesInterfaceStr[:trimRight]
+
+		// Make the generic species interface more readable
+		match := regexp.MustCompile(`(\|?\s?[A-Za-z0-9]+\s?\|?\|?\s?[A-Za-z0-9]+\s?\|?\|?\s?[A-Za-z0-9]+\s?\|?\|?\s?[A-Za-z0-9]+\s?\|?\|?\s?[A-Za-z0-9]+\s?\|?)`)
+		replacement := "	${1}\n"
+		genericSpeciesInterfaceStr = match.ReplaceAllString(genericSpeciesInterfaceStr, replacement)
+		genericSpeciesInterface := SpeciesData{
+			Species:                 &speciesStructure,
+			GenericSpeciesInterface: genericSpeciesInterfaceStr,
+		}
+
+		// process template for cmd/species/species_go_generator.txt
+		templateGenericSpeciesInterface, err := template.ParseFiles("cmd/species/species_go_generator.tmpl")
+		templateGenericSpeciesInterface.Funcs(template.FuncMap{"mod": func(i, j int) bool { return i%j == 0 }})
+		//templateGenericSpeciesInterface.Funcs(template.FuncMap{"inc": func(i, j int) int { return i + j }})
+		if err != nil {
+			fmt.Println("Error parsing template:", err)
+			panic(err)
+		}
+
+		file, err := os.Create("cmd/species/species_go_generator_test.txt")
+		if err != nil {
+			fmt.Println("Error creating file:", err)
+			panic(err)
+		}
+		defer file.Close()
+
+		// Execute the template and write to the file
+		err = templateGenericSpeciesInterface.Execute(file, genericSpeciesInterface)
+		if err != nil {
+			fmt.Println("Error executing template:", err)
+			panic(err)
+		}
+
 		return nil
 	}
 }

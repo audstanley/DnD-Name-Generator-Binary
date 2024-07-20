@@ -223,7 +223,7 @@ func GenerateSpecies(speciesStructure []SpeciesInfo) error {
 			GenericSpeciesInterface: genericSpeciesInterfaceStr,
 		}
 
-		// process template for cmd/species/species_go_generator.txt
+		// process template for cmd/species/species_go_generator.go
 		templateGenericSpeciesInterface, err := template.ParseFiles("cmd/species/species_go_generator.tmpl")
 		templateGenericSpeciesInterface.Funcs(template.FuncMap{"mod": func(i, j int) bool { return i%j == 0 }})
 		//templateGenericSpeciesInterface.Funcs(template.FuncMap{"inc": func(i, j int) int { return i + j }})
@@ -232,7 +232,7 @@ func GenerateSpecies(speciesStructure []SpeciesInfo) error {
 			panic(err)
 		}
 
-		file, err := os.Create("cmd/species/species_go_generator_test.txt")
+		file, err := os.Create("cmd/species/species_go_generator.go")
 		if err != nil {
 			fmt.Println("Error creating file:", err)
 			panic(err)

@@ -47,6 +47,18 @@ The hard part will be to get contributors to add names.
 # will eventually produce something like Jane Doe, Clan of Riverrunners, of Neverwinter
 ```
 
+Though, still in active development try:
+```bash
+dnd-names species --help
+```
+
+and once you've figured out a species that you want to generate for:
+
+```bash
+dnd-names species aarakocra --help
+```
+
+
 #### Future Goals after completing:
 * Ai tools for creating character importabe [FoundryVTT](https://foundryvtt.com/) stat sheets based on character names using the [5e-statblock-importer](https://foundryvtt.com/packages/5e-statblock-importer).
 * Going to see if I can figure out [this kind of model](https://cros.land/ai-powered-dnd-5e-monster-statblock-generator/), and create an API alongside llama to create perfect stat sheets.

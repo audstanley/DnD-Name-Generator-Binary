@@ -44,7 +44,7 @@ Feel Free to fork, and add new names or new cli features. I've got cobra and vip
 # generate go file from names list
 # first, add new names to generator/names.txt
 # then...
-./dnd-names generate
+./dnd-names generator
 # then
 go build -o dnd-names
 ./dnd-names --number 10
@@ -54,7 +54,7 @@ if you're forking and adding new names to the giant names list for a pull reques
 if you're working on name categories by spiecies (formally "races") using a yaml file, please take a look at the format in names.yaml
 
 ```bash
-./dnd-names generate # when in the project directory ...
+./dnd-names generator # when in the project directory ...
 ```
 
 will eventually work through the generator/speciesTypes subfolders and generate first and last names based on the text files.

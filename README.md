@@ -71,3 +71,15 @@ Those text files will be automatically be alphabetised, and converted into golan
 ```
 
 See [cmd/generator/README.md](https://github.com/audstanley/DnD-Name-Generator-Binary/tree/main/cmd/generator) since it's in active development.
+
+Though, still in active development, if you need help try:
+```bash
+dnd-names species --help
+```
+
+and once you've figured out a species that you want to generate for:
+
+```bash
+dnd-names species aarakocra --help
+```
+

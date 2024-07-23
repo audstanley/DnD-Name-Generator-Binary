@@ -74,12 +74,12 @@ See [cmd/generator/README.md](https://github.com/audstanley/DnD-Name-Generator-B
 
 Though, still in active development, if you need help try:
 ```bash
-dnd-names species --help
+./dnd-names species --help
 ```
 
 and once you've figured out a species that you want to generate for:
 
 ```bash
-dnd-names species aarakocra --help
+./dnd-names species aarakocra --help
 ```
 

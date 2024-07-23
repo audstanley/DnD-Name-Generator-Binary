@@ -16,7 +16,7 @@ This has been updated - special names will be used for tabaxi and tiefling. I'm 
 
  ```bash
  # proof of concept
- dnd-names species --male --dragonborn --last --tiefling --special --human --number 20;
+ dnd-names species dragonborn male --number 20;
 ```
 
 - [ ] Special Names should be specified in the CLI. It's not a priority right now. if --male --dragonborn is picked, Asume --last --dragonborn.

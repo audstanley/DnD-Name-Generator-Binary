@@ -40,9 +40,10 @@ Species Command will be generated from the Generator Command. This will allow fo
 The hard part will be to get contributors to add names.
 
 ```bash
-./dnd-names species --dragonborn --location --number 10
+# (not fully implementd yet)
+./dnd-names species dragonborn --location --number 10
 # should eventually produce something like John Doe of Baulder's Gate - with 9 additional generated names.
-./dnd-names species --tabaxi --special --location --number 1
+./dnd-names species tabaxi --special --location --number 1
 # will eventually produce something like Jane Doe, Clan of Riverrunners, of Neverwinter
 ```
 

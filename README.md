@@ -62,10 +62,10 @@ Those text files will be automatically be alphabetised, and converted into golan
 
 ```bash
 # (not yet implemented)
-./dnd-names --female --dragonborn -n 10
+./dnd-names species dragonborn female -n 10
 # print 10 female dragonborn names, first and last name.
 # or...
-./dnd-names --nonbinary --dragonborn -n 8
+./dnd-names species dragonborn nonbinary -n 8
 # print 8 nonbinary dragonborn names, first and last name.
 
 ```

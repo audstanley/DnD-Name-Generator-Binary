@@ -36,12 +36,13 @@ type NamesTypes struct {
 }
 
 type SpeciesInfo struct {
-	NameOfSpecies      string     `yaml:"NameOfSpecies"`           // Field for species name
-	GlobalVariableName string     `yaml:"GlobalVariableName"`      // Field for global variable name
-	NameOrder          []string   `yaml:"NameOrder,omitempty"`     // Field for order of names
-	Variable           string     `yaml:"Variable,omitempty"`      // Field for your string value
-	TextFileNames      []string   `yaml:"TextFileNames,omitempty"` // Field for list of text files
-	Names              NamesTypes `yaml:"Names,omitempty"`         // Field for list of names
+	NameOfSpecies      string     `yaml:"NameOfSpecies"`             // Field for species name
+	GlobalVariableName string     `yaml:"GlobalVariableName"`        // Field for global variable name
+	NameOrder          []string   `yaml:"NameOrder,omitempty"`       // Field for order of names
+	Variable           string     `yaml:"Variable,omitempty"`        // Field for your string value
+	CommandVariable    string     `yaml:"CommandVariable,omitempty"` // Field for your string value
+	TextFileNames      []string   `yaml:"TextFileNames,omitempty"`   // Field for list of text files
+	Names              NamesTypes `yaml:"Names,omitempty"`           // Field for list of names
 	// Other fields specific to species data (if any)
 }
 
@@ -225,8 +226,6 @@ func GenerateSpecies(speciesStructure []SpeciesInfo) error {
 
 		// process template for cmd/species/species_go_generator.go
 		templateGenericSpeciesInterface, err := template.ParseFiles("cmd/species/species_go_generator.tmpl")
-		templateGenericSpeciesInterface.Funcs(template.FuncMap{"mod": func(i, j int) bool { return i%j == 0 }})
-		//templateGenericSpeciesInterface.Funcs(template.FuncMap{"inc": func(i, j int) int { return i + j }})
 		if err != nil {
 			fmt.Println("Error parsing template:", err)
 			panic(err)
@@ -303,6 +302,7 @@ func ProcessSpeciesDataForFolderStructredTextData(speciesMap map[string]interfac
 			TextFileNames:      []string{},
 		})
 		latestSpecies := speciesStructure[len(speciesStructure)-1]
+		latestSpecies.CommandVariable = strings.ToLower(latestSpecies.Variable)
 		latestSpecies.NameOrder = latestSpecies.TextFileNames
 		for _, textFileName := range v.(map[string]interface{})["TextFileNames"].([]interface{}) {
 			filepath := latestSpecies.NameOfSpecies + "/" + latestSpecies.NameOfSpecies + "-" + textFileName.(string) + ".txt"
